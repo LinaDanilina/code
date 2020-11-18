@@ -1,14 +1,13 @@
-from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.template import loader
+
+from .models import Product
 
 
-def image_upload(request):
-    if request.method == "POST" and request.FILES["image_file"]:
-        image_file = request.FILES["image_file"]
-        fs = FileSystemStorage()
-        filename = fs.save(image_file.name, image_file)
-        image_url = fs.url(filename)
-        print(image_url)
-        return render(request, "upload.html", {
-            "image_url": image_url
-        })
-    return render(request, "upload.html")
+def index(request):
+    latest_product_list = Product.objects.order_by('-pub_date')[:5]
+    template = loader.get_template('index.html')
+    context = {
+        'latest_product_list': latest_product_list,
+    }
+    return HttpResponse(template.render(context, request))

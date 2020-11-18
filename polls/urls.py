@@ -1,12 +1,12 @@
-from django.contrib import admin
 from django.urls import path
+from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-
-from upload.views import image_upload
+from . import views
 
 urlpatterns = [
-    path("", image_upload, name="upload"),
+    # ex: /polls/
+    path('', views.index, name='index'),
     path("admin/", admin.site.urls),
 ]
 
