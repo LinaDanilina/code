@@ -6,56 +6,33 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     command: sh -c "python3 manage.py collectstatic --noinput && python3 manage.py migrate --noinput && gunicorn composeexample.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - static_volume:/home/code/web/staticfiles
+      - media_volume:/home/code/web/mediafiles
     expose:
       - 8000
     env_file:
       - ./env.prod
-    volumes:
-      - static_volume:/home/сode/polls/web/staticfiles
-      - media_volume:/home/code/web/mediafiles
     depends_on:
-      - master
+      - db
 
-  master:
-    build: ./master
-    command: postgres -c config_file=/postgresql.conf
-    networks:
-      - db
-    ports:
-      - "5500:5432"
-    environment:
-      - REP_USER=rep_user
-      - REP_PASSWORD=rep_password
-      - REP_DB=rep_test
+  db:
+    image: postgres:12.0-alpine
     volumes:
-      - .postgresql.conf:/postgresql.conf
-  listener:
-    build: ./listener
-    command: /listen.sh
-    networks:
-      - db
-    environment:
-      - PGHOST=master
-      - PGUSER=rep_user
-      - PGPASSWORD=rep_password
-      - PGAPPNAME=rep_test_app
-      - PGSSLMODE=require
-      - REP_DB=rep_test
-      - REP_SLOT=rep_test_slot
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./env.prod.db
   nginx:
     build: ./nginx
+    volumes:
+      - static_volume:/home/code/web/staticfiles
+      - media_volume:/home/code/web/mediafiles
     ports:
       - 1337:80
-    volumes:
-      - static_volume:/home/code/polls/web/staticfiles
-      - media_volume:/home/code/web/mediafiles
     depends_on:
       - web
-networks:
-    db:
-      driver: bridge
+
 volumes:
   postgres_data:
   static_volume:
   media_volume:
-

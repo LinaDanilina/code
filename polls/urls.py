@@ -7,7 +7,7 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
-    path('<int:book_id>/', views.detail, name='detail'),
+    #path('<int:book_id>/', views.detail, name='detail'),
     # ex: /polls/5/results/
     #path('<int:book_id>/results/', views.results, name='results'),
     # ex: /polls/5/vote/
