@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    command: sh -c "python3 manage.py collectstatic --noinput && python3 manage.py migrate --noinput && gunicorn composeexample.wsgi:application --bind 0.0.0.0:8000"
+    command: sh -c "python3 manage.py collectstatic --noinput  && python3 manage.py makemigrations && python3 manage.py migrate  && gunicorn composeexample.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - static_volume:/home/code/web/staticfiles
       - media_volume:/home/code/web/mediafiles
@@ -22,6 +22,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./env.prod.db
+
   nginx:
     build: ./nginx
     volumes:

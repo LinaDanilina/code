@@ -6,11 +6,9 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('clients/', views.cl, name='clients'),
     path('admin/', admin.site.urls),
-    #path('<int:book_id>/', views.detail, name='detail'),
-    # ex: /polls/5/results/
-    #path('<int:book_id>/results/', views.results, name='results'),
-    # ex: /polls/5/vote/
-    #path('<int:book_id>/vote/', views.vote, name='vote'),
-    #path('<int:book_id>/', views.book, name='book_by_id'),
+    path('<int:product_id>/', views.detail, name='detail'),
+    path('clients/<int:client_id>/', views.detail_cl, name='detail_cl'),
+
 ]

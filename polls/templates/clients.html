@@ -1,0 +1,11 @@
+{% load static%}
+{% if latest_clients_list %}
+    <ul>
+    {% for client in latest_clients_list %}
+        <li><a href="/polls/clients/{{ client.id }}/">{{ client.client_surname}} {{client.client_name}}</a></li>
+
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No clients are available.</p>
+{% endif %}

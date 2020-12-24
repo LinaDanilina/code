@@ -2,7 +2,7 @@ version: '3.7'
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000 && python manage.py migrate && python manage.py check_external_modules && python manage.py collectstatic
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
@@ -14,7 +14,7 @@ services:
   db:
     image: postgres:12.0-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - /var/lib/postgresql/data
     environment:
       - POSTGRES_USER=hello_django
       - POSTGRES_PASSWORD=hello_django
